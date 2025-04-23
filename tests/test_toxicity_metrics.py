@@ -39,7 +39,7 @@ class TestToxicityMetrics(unittest.TestCase):
                 and (platform.system() == "Darwin")
             ):
                 continue  # skips CI unit test in macos to avoid memory error
-            print(f"Classifier:{classifier}")
+
             detoxify = ToxicityMetrics(
                 classifiers=[classifier],
                 batch_size=100,
@@ -50,7 +50,7 @@ class TestToxicityMetrics(unittest.TestCase):
                 responses=toxic.get("data").get("response"),
                 prompts=toxic.get("data").get("prompt"),
             ) 
-            print(f"Calculated result:{toxic_results}")
+
             with open(f"{data_folder}/toxic_results_{classifier}.json", "r") as f:
                 toxic_results_actual = json.load(f)
                 print(f"Actual result:{toxic_results_actual}")

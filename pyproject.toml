@@ -44,7 +44,6 @@ sentence-transformers = "^2.7.0"
 typing = {version = "^3.7.4", python = "<3.10"}
 tiktoken = "^0.7.0"
 transformers = ">=4.48.0"
-setuptools = ">=78.1.1"
 
 [tool.poetry.group.dev.dependencies]
 langchain-openai = "^0.2.9"

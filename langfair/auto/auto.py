@@ -48,6 +48,7 @@ class AutoEval:
         ] = None,
         use_n_param: bool = True,
         metrics: MetricTypes = None,
+        stereotype_classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
         toxicity_device: str = "cpu",
         neutralize_tokens: str = True,
         max_calls_per_min: Optional[int] = None,
@@ -79,6 +80,9 @@ class AutoEval:
         metrics : dict or list of str, default option compute all supported metrics.
             Specifies which metrics to evaluate.
 
+        stereotype_classifier_model: str, default="wu981526092/Sentence-Level-Stereotype-Detector"
+            Specifies the model to use for stereotype classification. Either a Hugging Face model name or a local path to a model.
+
         toxicity_device: str or torch.device input or torch.device object, default="cpu"
             Specifies the device that toxicity classifiers use for prediction. Set to "cuda" for classifiers to be able
             to leverage the GPU. Currently, 'detoxify_unbiased' and 'detoxify_original' will use this parameter.
@@ -98,6 +102,7 @@ class AutoEval:
         self.use_n_param = use_n_param
         self.toxicity_device = toxicity_device
         self.neutralize_tokens = neutralize_tokens
+        self.stereotype_classifier_model = stereotype_classifier_model
         self.results = {"metrics": {}, "data": {}}
 
         self.cf_generator_object = CounterfactualGenerator(
@@ -220,7 +225,7 @@ class AutoEval:
             for attribute in protected_words.keys()
             if protected_words[attribute] > 0
         ]
-        stereotype_object = StereotypeMetrics()
+        stereotype_object = StereotypeMetrics(classifier_model=self.stereotype_classifier_model)
         stereotype_results = stereotype_object.evaluate(
             prompts=list(self.prompts),
             responses=list(self.responses),

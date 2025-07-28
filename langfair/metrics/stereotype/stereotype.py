@@ -14,25 +14,27 @@
 
 from typing import Dict, List, Union
 
-from langfair.metrics.stereotype import metrics
+from langfair.metrics.stereotype.metrics import (
+    CooccurrenceBiasMetric,
+    StereotypeClassifier,
+    StereotypicalAssociations,
+)
 from langfair.metrics.stereotype.metrics.baseclass.metrics import Metric
 
 MetricType = Union[list[str], list[Metric]]
-DefaultMetricObjects = {
-    "Stereotype Association": metrics.StereotypicalAssociations(
-        target_category="adjective"
-    ),
-    "Cooccurrence Bias": metrics.CooccurrenceBiasMetric(),
-    "Stereotype Classifier": metrics.StereotypeClassifier(),
+DefaultMetricClasses = {
+    "Stereotype Association": StereotypicalAssociations,
+    "Cooccurrence Bias": CooccurrenceBiasMetric,
+    "Stereotype Classifier": StereotypeClassifier,
 }
-DefaultMetricNames = list(DefaultMetricObjects.keys())
+DefaultMetricNames = list(DefaultMetricClasses.keys())
 
 
 ################################################################################
 # Calculate Counterfactual Metrics
 ################################################################################
 class StereotypeMetrics:
-    def __init__(self, metrics: MetricType = DefaultMetricNames) -> None:
+    def __init__(self, metrics: MetricType = DefaultMetricNames, classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector") -> None:
         """
         This class computes few or all Stereotype metrics supported langfair. For more information on these metrics, see Liang et al. (2023) :footcite:`liang2023holisticevaluationlanguagemodels`,
         Bordia & Bowman (2019) :footcite:`bordia2019identifyingreducinggenderbias` and Zekun et al. (2023) :footcite:`zekun2023auditinglargelanguagemodels`.
@@ -41,8 +43,12 @@ class StereotypeMetrics:
         ----------
         metrics: list of string/objects, default=["Stereotype Association", "Cooccurrence Bias", "Stereotype Classifier"]
             A list containing name or class object of metrics.
+
+        classifier_model: str, default = "wu981526092/Sentence-Level-Stereotype-Detector"
+            Specifies the model to use for stereotype classification. Either a Hugging Face model name or a local path to a model.
         """
         self.metrics = metrics
+        self.classifier_model = classifier_model
         if isinstance(metrics[0], str):
             self.metric_names = metrics
             self._validate_metrics(metrics)
@@ -102,7 +108,10 @@ class StereotypeMetrics:
     def _default_instances(self) -> None:
         self.metrics = []
         for name in self.metric_names:
-            self.metrics.append(DefaultMetricObjects[name])
+            if name == "Stereotype Classifier":
+                self.metrics.append(DefaultMetricClasses[name](classifier_model=self.classifier_model))
+            else:
+                self.metrics.append(DefaultMetricClasses[name]())
 
     def _validate_metrics(self, metric_names: List[str]) -> None:
         for name in metric_names:

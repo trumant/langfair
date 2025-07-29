@@ -39,7 +39,7 @@ class CounterfactualMetrics:
         metrics: MetricType = DefaultMetricNames, 
         neutralize_tokens: str = True,
         sentiment_classifier: str = "vader",
-        cosine_transformer: str = "all-MiniLM-L6-v2",
+        transformer: str = "all-MiniLM-L6-v2",
         device: str = "cpu",
         how: str = "pairwise",
     ) -> None:
@@ -59,7 +59,7 @@ class CounterfactualMetrics:
         sentiment_classifier : {'vader','roberta'}, default='vader'
             The sentiment classifier used to calculate counterfactual sentiment bias.
             
-        cosine_transformer : str (HuggingFace sentence transformer), default='all-MiniLM-L6-v2'
+        transformer : str (HuggingFace sentence transformer), default='all-MiniLM-L6-v2'
             Specifies which huggingface sentence transformer to use when computing cosine distance. See
             https://huggingface.co/sentence-transformers?sort_models=likes#models
             for more information. The recommended sentence transformer is 'all-MiniLM-L6-v2'. User can also specify a local path to a model.
@@ -77,7 +77,7 @@ class CounterfactualMetrics:
             self.cf_generator = CounterfactualGenerator()
         self.sentiment_classifier = sentiment_classifier
         self.device = device
-        self.cosine_transformer = cosine_transformer
+        self.transformer = transformer
         self.how = how
         self.metrics = metrics
         if isinstance(metrics[0], str):
@@ -159,7 +159,7 @@ class CounterfactualMetrics:
     def _default_instances(self):
         """Define default metrics."""
         default_parameters = {
-            "Cosine": {"transformer": self.cosine_transformer, "how": self.how},
+            "Cosine": {"transformer": self.transformer, "how": self.how},
             "Rougel": {"how": self.how},
             "Bleu": {"how": self.how},
             "Sentiment Bias": {"classifier":self.sentiment_classifier, "device": self.device, "how":self.how},

@@ -48,7 +48,7 @@ class AutoEval:
         ] = None,
         use_n_param: bool = True,
         metrics: MetricTypes = None,
-        counterfactual_cosine_transformer: str = "all-MiniLM-L6-v2",
+        counterfactual_transformer: str = "all-MiniLM-L6-v2",
         counterfactual_sentiment_classifier: str = "vader",
         stereotype_classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
         toxicity_device: str = "cpu",
@@ -82,7 +82,7 @@ class AutoEval:
         metrics : dict or list of str, default option compute all supported metrics.
             Specifies which metrics to evaluate.
 
-        counterfactual_cosine_transformer: str, default="all-MiniLM-L6-v2"
+        counterfactual_transformer: str, default="all-MiniLM-L6-v2"
             Specifies which huggingface sentence transformer to use when computing cosine distance. See
             https://huggingface.co/sentence-transformers?sort_models=likes#models
             for more information. The recommended sentence transformer is 'all-MiniLM-L6-v2'. User can also specify a local path to a model.
@@ -114,7 +114,7 @@ class AutoEval:
         self.neutralize_tokens = neutralize_tokens
         self.stereotype_classifier_model = stereotype_classifier_model
         self.results = {"metrics": {}, "data": {}}
-        self.counterfactual_cosine_transformer = counterfactual_cosine_transformer
+        self.counterfactual_transformer = counterfactual_transformer
         self.counterfactual_sentiment_classifier = counterfactual_sentiment_classifier
 
         self.cf_generator_object = CounterfactualGenerator(
@@ -259,7 +259,7 @@ class AutoEval:
             self.counterfactual_data = {}
             counterfactual_object = CounterfactualMetrics(
                 neutralize_tokens=self.neutralize_tokens,
-                cosine_transformer=self.counterfactual_cosine_transformer,
+                transformer=self.counterfactual_transformer,
                 sentiment_classifier=self.counterfactual_sentiment_classifier,
             )
             for attribute in Protected_Attributes.keys():

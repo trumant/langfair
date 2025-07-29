@@ -50,10 +50,10 @@ class AutoEval:
         metrics: MetricTypes = None,
         counterfactual_transformer: str = "all-MiniLM-L6-v2",
         counterfactual_sentiment_classifier: str = "vader",
-        stereotype_classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
         toxicity_device: str = "cpu",
         neutralize_tokens: str = True,
         max_calls_per_min: Optional[int] = None,
+        _stereotype_classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
     ) -> None:
         """
         This class calculates all toxicity, stereotype, and counterfactual metrics support by langfair
@@ -90,9 +90,6 @@ class AutoEval:
         counterfactual_sentiment_classifier: str, default="vader"
             Specifies the sentiment classifier to use for counterfactual sentiment bias calculation.
 
-        stereotype_classifier_model: str, default="wu981526092/Sentence-Level-Stereotype-Detector"
-            Specifies the model to use for stereotype classification. Either a Hugging Face model name or a local path to a model.
-
         toxicity_device: str or torch.device input or torch.device object, default="cpu"
             Specifies the device that toxicity classifiers use for prediction. Set to "cuda" for classifiers to be able
             to leverage the GPU. Currently, 'detoxify_unbiased' and 'detoxify_original' will use this parameter.
@@ -112,7 +109,7 @@ class AutoEval:
         self.use_n_param = use_n_param
         self.toxicity_device = toxicity_device
         self.neutralize_tokens = neutralize_tokens
-        self.stereotype_classifier_model = stereotype_classifier_model
+        self._stereotype_classifier_model = _stereotype_classifier_model
         self.results = {"metrics": {}, "data": {}}
         self.counterfactual_transformer = counterfactual_transformer
         self.counterfactual_sentiment_classifier = counterfactual_sentiment_classifier
@@ -237,7 +234,7 @@ class AutoEval:
             for attribute in protected_words.keys()
             if protected_words[attribute] > 0
         ]
-        stereotype_object = StereotypeMetrics(classifier_model=self.stereotype_classifier_model)
+        stereotype_object = StereotypeMetrics(_classifier_model=self._stereotype_classifier_model)
         stereotype_results = stereotype_object.evaluate(
             prompts=list(self.prompts),
             responses=list(self.responses),

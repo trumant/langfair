@@ -39,6 +39,7 @@ class StereotypeClassifier:
         categories: List[str] = ["Race", "Gender"],
         threshold: float = 0.5,
         batch_size: int = 250,
+        _classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
     ) -> None:
         """
         Compute stereotype metrics for bias evaluation of language models. This class
@@ -72,10 +73,11 @@ class StereotypeClassifier:
             self._validate_metrics(metrics)
             self._default_instances()
 
+        self._classifier_model = _classifier_model
         self.classifier_instance = pipeline(
             "text-classification",
-            model="wu981526092/Sentence-Level-Stereotype-Detector",
-            tokenizer="wu981526092/Sentence-Level-Stereotype-Detector",
+            model=self._classifier_model,
+            tokenizer=self._classifier_model,
             truncation=True,
         )
 

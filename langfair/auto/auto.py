@@ -48,6 +48,8 @@ class AutoEval:
         ] = None,
         use_n_param: bool = True,
         metrics: MetricTypes = None,
+        counterfactual_cosine_transformer: str = "all-MiniLM-L6-v2",
+        counterfactual_sentiment_classifier: str = "vader",
         stereotype_classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
         toxicity_device: str = "cpu",
         neutralize_tokens: str = True,
@@ -80,6 +82,14 @@ class AutoEval:
         metrics : dict or list of str, default option compute all supported metrics.
             Specifies which metrics to evaluate.
 
+        counterfactual_cosine_transformer: str, default="all-MiniLM-L6-v2"
+            Specifies which huggingface sentence transformer to use when computing cosine distance. See
+            https://huggingface.co/sentence-transformers?sort_models=likes#models
+            for more information. The recommended sentence transformer is 'all-MiniLM-L6-v2'. User can also specify a local path to a model.
+
+        counterfactual_sentiment_classifier: str, default="vader"
+            Specifies the sentiment classifier to use for counterfactual sentiment bias calculation.
+
         stereotype_classifier_model: str, default="wu981526092/Sentence-Level-Stereotype-Detector"
             Specifies the model to use for stereotype classification. Either a Hugging Face model name or a local path to a model.
 
@@ -104,6 +114,8 @@ class AutoEval:
         self.neutralize_tokens = neutralize_tokens
         self.stereotype_classifier_model = stereotype_classifier_model
         self.results = {"metrics": {}, "data": {}}
+        self.counterfactual_cosine_transformer = counterfactual_cosine_transformer
+        self.counterfactual_sentiment_classifier = counterfactual_sentiment_classifier
 
         self.cf_generator_object = CounterfactualGenerator(
             langchain_llm=langchain_llm,
@@ -247,6 +259,8 @@ class AutoEval:
             self.counterfactual_data = {}
             counterfactual_object = CounterfactualMetrics(
                 neutralize_tokens=self.neutralize_tokens,
+                cosine_transformer=self.counterfactual_cosine_transformer,
+                sentiment_classifier=self.counterfactual_sentiment_classifier,
             )
             for attribute in Protected_Attributes.keys():
                 if protected_words[attribute] > 0:

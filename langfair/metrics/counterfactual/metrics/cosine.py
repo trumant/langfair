@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
 from typing import Any, List, Tuple, Union
 
 import numpy as np
@@ -33,6 +34,7 @@ class CosineSimilarity(Metric):
             Specifies which huggingface sentence transformer to use when computing cosine distance. See
             https://huggingface.co/sentence-transformers?sort_models=likes#models
             for more information. The recommended sentence transformer is 'all-MiniLM-L6-v2'.
+            User can also specify a local path to a model.
 
         how : {'mean','pairwise'}
             Specifies whether to return the mean cosine similarity over all counterfactual pairs or a list containing cosine
@@ -49,7 +51,7 @@ class CosineSimilarity(Metric):
         self.how = how
         self.transformer = transformer
         self.transformer_instance = SentenceTransformer(
-            f"sentence-transformers/{transformer}"
+            f"sentence-transformers/{transformer}" if not os.path.exists(transformer) else transformer
         )
 
     def evaluate(

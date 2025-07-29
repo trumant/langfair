@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from typing import Any, Dict, Union, Optional
+from typing import Any, Dict, Union
 
 import numpy as np
 
@@ -39,7 +39,9 @@ class CounterfactualMetrics:
         metrics: MetricType = DefaultMetricNames, 
         neutralize_tokens: str = True,
         sentiment_classifier: str = "vader",
+        cosine_transformer: str = "all-MiniLM-L6-v2",
         device: str = "cpu",
+        how: str = "pairwise",
     ) -> None:
         """
         This class computes few or all counterfactual metrics supported LangFair. For more information on these metrics,
@@ -57,16 +59,26 @@ class CounterfactualMetrics:
         sentiment_classifier : {'vader','roberta'}, default='vader'
             The sentiment classifier used to calculate counterfactual sentiment bias.
             
+        cosine_transformer : str (HuggingFace sentence transformer), default='all-MiniLM-L6-v2'
+            Specifies which huggingface sentence transformer to use when computing cosine distance. See
+            https://huggingface.co/sentence-transformers?sort_models=likes#models
+            for more information. The recommended sentence transformer is 'all-MiniLM-L6-v2'. User can also specify a local path to a model.
+            
         device: str or torch.device input or torch.device object, default="cpu"
             Specifies the device that classifiers use for prediction. Set to "cuda" for classifiers to be able to leverage the GPU.
             Only 'SentimentBias' class will use this parameter for 'roberta' sentiment classifier.
+
+        how : {'mean','pairwise'}, default='pairwise'
+            Specifies whether to return the mean cosine similarity over all counterfactual pairs or a list containing cosine
+            distance for each pair.
         """
         self.neutralize_tokens = neutralize_tokens
         if self.neutralize_tokens:
             self.cf_generator = CounterfactualGenerator()
         self.sentiment_classifier = sentiment_classifier
         self.device = device
-        
+        self.cosine_transformer = cosine_transformer
+        self.how = how
         self.metrics = metrics
         if isinstance(metrics[0], str):
             self.metric_names = metrics
@@ -147,10 +159,10 @@ class CounterfactualMetrics:
     def _default_instances(self):
         """Define default metrics."""
         default_parameters = {
-            "Cosine": {"transformer": "all-MiniLM-L6-v2", "how": "pairwise"},
-            "Rougel": {"how": "pairwise"},
-            "Bleu": {"how": "pairwise"},
-            "Sentiment Bias": {"classifier":self.sentiment_classifier, "device": self.device, "how":"pairwise"},
+            "Cosine": {"transformer": self.cosine_transformer, "how": self.how},
+            "Rougel": {"how": self.how},
+            "Bleu": {"how": self.how},
+            "Sentiment Bias": {"classifier":self.sentiment_classifier, "device": self.device, "how":self.how},
         }
         self.metrics = []
         for name in self.metric_names:

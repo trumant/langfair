@@ -36,10 +36,10 @@ class StereotypeClassifier:
     def __init__(
         self,
         metrics: MetricType = DefaultMetricNames,
-        classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
         categories: List[str] = ["Race", "Gender"],
         threshold: float = 0.5,
         batch_size: int = 250,
+        _classifier_model: str = "wu981526092/Sentence-Level-Stereotype-Detector",
     ) -> None:
         """
         Compute stereotype metrics for bias evaluation of language models. This class
@@ -51,9 +51,6 @@ class StereotypeClassifier:
         ----------
         metrics : list of str, default = ["Stereotype Fraction", "Expected Maximum Stereotype", "Stereotype Probability"]
             Specifies which metrics to use. This input will be ignored if method `evaluate` is called with `prompts`.
-
-        classifier_model : str, default = "wu981526092/Sentence-Level-Stereotype-Detector"
-            Specifies the model to use for stereotype classification. Either a Hugging Face model name or a local path to a model.
 
         categories : list of str, default = ['Race', 'Gender']
             The classifier score the model responses based on four categories gender, race, profession, and religion.
@@ -76,11 +73,11 @@ class StereotypeClassifier:
             self._validate_metrics(metrics)
             self._default_instances()
 
-        self.classifier_model = classifier_model
+        self._classifier_model = _classifier_model
         self.classifier_instance = pipeline(
             "text-classification",
-            model=self.classifier_model,
-            tokenizer=self.classifier_model,
+            model=self._classifier_model,
+            tokenizer=self._classifier_model,
             truncation=True,
         )
 

@@ -53,6 +53,22 @@ repository:
       affiliation: CVS Health
       email: dylan.bouchard@cvshealth.com
       primary:     true
+    - name:        Mohit Singh Chauhan
+      affiliation: CVS Health
+      email: mohitsingh.chauhan@cvshealth.com
+      primary:     false
+    - name:        David Skarbrevik
+      affiliation: CVS Health
+      email: david.skarbrevik@cvshealth.com
+      primary:     false
+    - name:        Viren Bajaj
+      affiliation: CVS Health
+      email: bajajv@aetna.com
+      primary: false
+    - name:        Zeya Ahmad
+      affiliation: CVS Health
+      email: zeya.ahmad@cvshealth.com
+      primary: false
   documentation:
     contributing-guide: https://github.com/cvs-health/langfair/blob/main/CONTRIBUTING.md
   license:

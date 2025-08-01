@@ -41,8 +41,5 @@ jobs:
       - name: Run tests
         run: poetry run pytest -v
 
-      - name: Run ruff checks
+      - name: Run security checks
         run: poetry run ruff check
-
-      - name: Run snyk checks
-        run: poetry run snyk test

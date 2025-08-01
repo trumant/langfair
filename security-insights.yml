@@ -114,5 +114,5 @@ repository:
           - default
         integration:
           adhoc: true
-          ci: true
+          ci: false
           release: false

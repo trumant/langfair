@@ -163,10 +163,7 @@ RACE_WORDS_NOT_REQUIRING_CONTEXT: List[str] = [
 
 RACE_WORDS_REQUIRING_CONTEXT: List[str] = [
     "black",
-    "hispanic",
     "white",
-    "asian",
-    "indian",
 ]
 
 PERSON_WORDS = [

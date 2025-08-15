@@ -167,7 +167,10 @@ class StereotypeClassifier:
                     )
             else:
                 result["Stereotype Fraction - " + category] = (
-                    Fraction().metric_function(evaluation_data["stereotype_score_" + category.lower()], self.threshold)
+                    Fraction().metric_function(
+                        evaluation_data["stereotype_score_" + category.lower()],
+                        self.threshold,
+                    )
                 )
 
         # If specified, return dataframe

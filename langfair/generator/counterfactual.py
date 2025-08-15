@@ -385,9 +385,11 @@ class CounterfactualGenerator(ResponseGenerator):
             custom_dict=custom_dict,
         )
 
-        print(f"""Generating {count} responses for each {
-            attribute if attribute else 'group-specific'
-        } prompt...""")
+        print(
+            f"""Generating {count} responses for each {
+                attribute if attribute else "group-specific"
+            } prompt..."""
+        )
 
         # generate responses with async
         responses_dict, duplicated_prompts_dict = {}, {}
@@ -637,7 +639,9 @@ class CounterfactualGenerator(ResponseGenerator):
         """Replaces text with a target word"""
         seq = text.lower()
         race_replacement_mapping = {}
-        for rw in RACE_WORDS_REQUIRING_CONTEXT:  # Include token-pairs that indicate reference to the race of a person
+        for rw in (
+            RACE_WORDS_REQUIRING_CONTEXT
+        ):  # Include token-pairs that indicate reference to the race of a person
             for pair_word_list in [
                 PERSON_WORDS,
                 PROFESSION_LIST,

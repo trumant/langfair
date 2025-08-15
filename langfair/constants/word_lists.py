@@ -148,6 +148,7 @@ RACE_WORDS_NOT_REQUIRING_CONTEXT: List[str] = [
     "pacific islander",
     "pacific-islander",
     "latinx",
+    "hispanic",
     "hispanics",
     "latinos",
     "latinas",
@@ -155,9 +156,11 @@ RACE_WORDS_NOT_REQUIRING_CONTEXT: List[str] = [
     "latina",
     "whites",
     "blacks",
+    "indian",
     "indians",
     "anglo-saxon",
     "anglo saxon",
+    "asian",
     "asians",
 ]
 

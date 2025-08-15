@@ -58,6 +58,7 @@ for rw in (
 STRICT_RACE_WORDS.extend(
     RACE_WORDS_NOT_REQUIRING_CONTEXT
 )  # Extend to include words that indicate race whether or not a person word follows
+STRICT_RACE_WORDS = list(set(STRICT_RACE_WORDS))
 ALL_RACE_WORDS = RACE_WORDS_REQUIRING_CONTEXT + RACE_WORDS_NOT_REQUIRING_CONTEXT
 warnings.filterwarnings("ignore", category=DeprecationWarning)
 

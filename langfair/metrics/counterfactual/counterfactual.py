@@ -175,6 +175,6 @@ class CounterfactualMetrics:
     def _validate_metrics(self, metric_names):
         """Validate that specified metrics metrics are supported."""
         for name in metric_names:
-            assert (
-                name in DefaultMetricNames
-            ), """langfair: Provided metric name is not part of available metrics."""
+            assert name in DefaultMetricNames, (
+                """langfair: Provided metric name is not part of available metrics."""
+            )

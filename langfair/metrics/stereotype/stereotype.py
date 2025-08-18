@@ -119,6 +119,6 @@ class StereotypeMetrics:
 
     def _validate_metrics(self, metric_names: List[str]) -> None:
         for name in metric_names:
-            assert (
-                name in DefaultMetricNames
-            ), """Provided metric name is not part of available metrics."""
+            assert name in DefaultMetricNames, (
+                """Provided metric name is not part of available metrics."""
+            )

@@ -3,6 +3,13 @@ name: CI
 on:
   push:
   pull_request:
+    paths-ignore:
+      - "**/*.md"
+      - security-insights.yml
+      - .github/ISSUE_TEMPLATE/**
+      - assets/**
+      - examples/**
+      - plans/**
 
 jobs:
   run-tests:
@@ -28,7 +35,7 @@ jobs:
           persist-credentials: false
 
       - name: Set up Python
-        uses: actions/setup-python@v5.6
+        uses: actions/setup-python@v5.6.0
         with:
           python-version: ${{matrix.python-version}}
 

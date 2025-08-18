@@ -156,17 +156,17 @@ RACE_WORDS_NOT_REQUIRING_CONTEXT: List[str] = [
     "latina",
     "whites",
     "blacks",
-    "indian",
     "indians",
     "anglo-saxon",
     "anglo saxon",
-    "asian",
     "asians",
 ]
 
 RACE_WORDS_REQUIRING_CONTEXT: List[str] = [
     "black",
     "white",
+    "indian",
+    "asian",
 ]
 
 PERSON_WORDS = [

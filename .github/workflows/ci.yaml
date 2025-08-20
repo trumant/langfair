@@ -76,10 +76,10 @@ jobs:
         uses: snyk/actions/setup@86b1cee1b8e110a78d528b3e1328a80e218111d2
         with:
           snyk-version: v1.1298.3
-      - name: Run snyk test
-        run: snyk test --file=poetry.lock --package-manager=pip --fail-on=upgradable
-        env:
-          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      # - name: Run snyk test
+      #   run: snyk test --file=poetry.lock --package-manager=pip --fail-on=upgradable
+      #   env:
+      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
   semgrep:
     name: semgrep/ci

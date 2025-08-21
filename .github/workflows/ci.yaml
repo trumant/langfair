@@ -72,14 +72,33 @@ jobs:
       - name: Run ruff checks
         run: poetry run ruff check
 
-      - name: Install snyk
-        uses: snyk/actions/setup@86b1cee1b8e110a78d528b3e1328a80e218111d2
+  trivy:
+    name: trivy/ci
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
         with:
-          snyk-version: v1.1298.3
-      # - name: Run snyk test
-      #   run: snyk test --file=poetry.lock --package-manager=pip --fail-on=upgradable
-      #   env:
-      #     SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+          persist-credentials: false
+      - name: Run trivy vulnerability scan
+        uses: aquasecurity/trivy-action@dc5a429b52fcf669ce959baa2c2dd26090d2a6c4
+        with:
+          format: sarif
+          output: "trivy-results.sarif"
+          scan-type: 'fs'
+          scan-ref: '.'
+          trivy-config: trivy.yaml
+      - name: Save SARIF results as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: trivy-scan-results
+          path: "trivy-results.sarif"
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        with:
+          sarif_file: "trivy-results.sarif"
 
   semgrep:
     name: semgrep/ci

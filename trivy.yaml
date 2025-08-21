@@ -1,0 +1,10 @@
+# Trivy configuration file
+exit-code: 1
+pkg:
+  include-dev-deps: true
+scan:
+  scanners:
+    - vuln
+    # - secret - disable because the project uses gitleaks
+vulnerability:
+  ignore-unfixed: true
